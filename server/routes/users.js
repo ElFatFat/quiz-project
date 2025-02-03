@@ -36,4 +36,42 @@ router.post('/login', async function(req, res, next) {
   }
 });
 
+//Check if a token is valid
+router.get('/checkToken', authenticateToken, function(req, res, next) {
+  res.status(200).json(req.user);
+});
+
+
+//Refresh a token if the time left is less than 15 minutes.
+router.post('/refreshToken', authenticateToken, (req, res) => {
+  const token = req.header('Authorization')?.split(' ')[1];
+  if (!token) return res.status(401).json({ message: 'Access denied. No token provided.' });
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET, { ignoreExpiration: true });
+    const now = Math.floor(Date.now() / 1000);
+    const timeLeft = decoded.exp - now;
+
+    // Refresh the token if it has less than 15 minutes left
+    if (timeLeft < 15 * 60) {
+      const newToken = jwt.sign({ userId: decoded.userId }, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME });
+      return res.status(200).json({ token: newToken });
+    }
+
+    res.status(200).json({ message: 'Token is still valid' });
+  } catch (error) {
+    res.status(400).json({ error: 'Invalid token' });
+  }
+});
+
+//Returns true if the user is an admin
+router.get('/isAdmin', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId);
+    res.status(200).json({ isAdmin: user.isAdmin });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 module.exports = router;

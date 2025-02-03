@@ -6,8 +6,11 @@ let path = require('path');
 let logger = require('morgan');
 
 
-let indexRouter = require('./routes/index');
-let usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const questionsRouter = require('./routes/questions');
+const themesRouter = require('./routes/themes');
+const scoresRouter = require('./routes/scores');
 
 const { connectToDB } = require('./config/database');
 
@@ -25,6 +28,9 @@ connectToDB();
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/questions', questionsRouter);
+app.use('/themes', themesRouter);
+app.use('/scores', scoresRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));
