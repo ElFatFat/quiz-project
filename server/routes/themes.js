@@ -50,6 +50,33 @@ router.get('/random/:id', async (req, res) => {
     }
   });
 
+//update a theme
+router.put('/:id', async (req, res) => {
+  try {
+    const { title, questions } = req.body;
+    const theme = await Theme.findByIdAndUpdate(req.params.id, { title, questions }, { new: true });
+    if (!theme) {
+      return res.status(404).json({ message: 'Theme not found' });
+    }
+    res.status(200).json(theme);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+//delete a theme
+router.delete('/:id', async (req, res) => {
+  try {
+    const theme = await Theme.findByIdAndDelete(req.params.id);
+    if (!theme) {
+      return res.status(404).json({ message: 'Theme not found' });
+    }
+    res.status(200).json(theme);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 
 
 module.exports = router;
