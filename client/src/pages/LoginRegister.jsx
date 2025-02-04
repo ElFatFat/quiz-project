@@ -4,6 +4,7 @@ import axios from 'axios';
 
 const LoginRegister = () => {
     const [isLogin, setIsLogin] = useState(false);
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -11,6 +12,7 @@ const LoginRegister = () => {
 
     const toggleForm = () => {
         setIsLogin(!isLogin);
+        setUsername('');
         setEmail('');
         setPassword('');
     };
@@ -19,7 +21,7 @@ const LoginRegister = () => {
         e.preventDefault();
 
         const endpoint = isLogin ? 'http://localhost:5001/users/login' : 'http://localhost:5001/users/register';
-        const data = { email, password };
+        const data = { username, email, password };
 
         // if (!isLogin && password !== confirmPassword) {
         //     alert("Les mots de passe ne correspondent pas");
@@ -50,6 +52,14 @@ const LoginRegister = () => {
         <div className="loginRegister">
             <h1>{isLogin ? 'Connexion' : 'Inscription'}</h1>
             <form onSubmit={handleSubmit}> 
+                {!isLogin && (
+                    <input 
+                    type="text" 
+                    placeholder="Pseudo" 
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    />
+                )}
                 <input 
                     type="text" 
                     placeholder="Email" 

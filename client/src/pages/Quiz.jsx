@@ -10,6 +10,14 @@ const Quiz = () => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [ws, setWs] = useState(null);
+    const [currentQuestion, setCurrentQuestion] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [isConnected, setIsConnected] = useState(false);
+    const [selectedTheme, setSelectedTheme] = useState('');
+
+    const handleTheme = (theme) => {
+        setSelectedTheme(theme.target.value);
+    }
 
     useEffect(() => {
         // Establish WebSocket connection
@@ -23,6 +31,17 @@ const Quiz = () => {
         socket.onmessage = (event) => {
             //ici que tu recevras des messages
             const message = JSON.parse(event.data);
+
+            if (message.type == 'admin') {
+                setIsConnected(true);
+                setIsAdmin(true);
+            }
+
+            if (message.type === 'question') {
+                console.log(message.question.title);
+                setCurrentQuestion(message.question.title);
+            }
+
             console.log('Received message:', message);
             setMessages(prevMessages => [...prevMessages, message]);
         };
@@ -45,6 +64,9 @@ const Quiz = () => {
             <Link to="/result">
                 <button className="startButton">Voir les résultats</button>
             </Link>
+            <div>
+                <h2>{currentQuestion}</h2>
+            </div>
             <div className="messages">
                 <h2>Messages:</h2>
                 <ul>
@@ -53,10 +75,24 @@ const Quiz = () => {
                     ))}
                 </ul>
             </div>
-            <input type="text" placeholder="Type" value={type} onChange={(e) => setType(e.target.value)} />
-            <input type="text" placeholder="Room" value={room} onChange={(e) => setRoom(e.target.value)} />
-            <input type="text" placeholder="Message" value={message} onChange={(e) => setMessage(e.target.value)} />
-            <button onClick={() => ws.send(JSON.stringify({ type: type, room: room, data: message }))}>Envoyer</button>
+            {
+            isConnected && (
+                <div>
+                    <select onChange={handleTheme}>
+                        <option value="Histoire">Histoire</option>
+                    </select>
+                    <button onClick={() =>  ws.send(JSON.stringify({ type: startGame, room: room, data: message }))}>start Game</button>
+                </div>
+                )
+            }
+            {!isConnected && (
+                <div>
+                    <input type="text" placeholder="Type" value={type} onChange={(e) => setType(e.target.value)} />
+                    <input type="text" placeholder="Room" value={room} onChange={(e) => setRoom(e.target.value)} />
+                    <input type="text" placeholder="Message" value={message} onChange={(e) => setMessage(e.target.value)} />
+                    <button onClick={() => ws.send(JSON.stringify({ type: type, room: room, data: message }))}>Envoyer</button> 
+                </div>
+            )}
         </div>
     );
 };
