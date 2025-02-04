@@ -1,6 +1,16 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
 
 const Home = () => {
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+    }
+
     const checkAdminStatus = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -15,6 +25,7 @@ const Home = () => {
                 }
             });
             console.log('Admin status:', response.data);
+            setIsAdmin(response.data.isAdmin);
         } catch (error) {
             console.error('Error during API request:', error);
             if (error.response) {
@@ -29,15 +40,23 @@ const Home = () => {
             console.error('Error config:', error.config);
         }
     };
+
+    useEffect(() => {
+        checkAdminStatus();
+    }, []);
+
     return (
-        <div className="home" onLoad={checkAdminStatus}>
-        <h1>Bienvenue</h1>
-        <Link to="/quiz">
-            <button className="startButton">Commencer le quiz</button>
-        </Link>
-        <Link to="/admin">
-            <button className="adminButton">Admin</button>
-        </Link>
+        <div className="home">
+            <h1>Bienvenue</h1>
+            <Link to="/quiz">
+                <button className="startButton">Commencer le quiz</button>
+            </Link>
+            {isAdmin && ( 
+                <Link to="/admin">
+                <button className="adminButton">Admin</button>
+                </Link>
+            )}
+            <button className="logoutButton" onClick={handleLogout}>Déconnexion</button>
         </div>
     );
 };
