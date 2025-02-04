@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 const Admin = () => {
     return (
         <div className="admin">
+            <Navbar />
+
         <h1>Admin</h1>
         <Link to="/admin/quiz">
             <button className="startButton">Gestion des quiz</button>
