@@ -1,62 +1,83 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Navbar from "../components/Navbar";
 
 
 const Home = () => {
     const [isAdmin, setIsAdmin] = useState(false);
+    const [themes, setThemes] = useState([]);
+    const [questions, setQuestions] = useState([]);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        window.location.href = '/';
+    const getThemes = async () => {
+        try {
+            const response = await axios.get('http://localhost:5001/themes/');
+            setThemes(response.data);
+        } catch (error) {
+            console.error('Error fetching themes:', error);
+        }
     }
 
-    const checkAdminStatus = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            console.error('No token found in local storage');
-            return;
-        }
-    
+    const getQuestions = async () => {
         try {
-            const response = await axios.get('http://localhost:5001/users/isAdmin', {
-                headers: {
-                    'Authorization': `${token}`
-                }
-            });
-            console.log('Admin status:', response.data);
-            setIsAdmin(response.data.isAdmin);
+            const response = await axios.get('http://localhost:5001/questions/');
+            setQuestions(response.data);
         } catch (error) {
-            console.error('Error during API request:', error);
-            if (error.response) {
-                console.error('Response data:', error.response.data);
-                console.error('Response status:', error.response.status);
-                console.error('Response headers:', error.response.headers);
-            } else if (error.request) {
-                console.error('Request data:', error.request);
-            } else {
-                console.error('Error message:', error.message);
-            }
-            console.error('Error config:', error.config);
+            console.error('Error fetching questions:', error);
         }
-    };
+    }
+    
 
     useEffect(() => {
-        checkAdminStatus();
+        getThemes();
+        getQuestions();
     }, []);
+
+    const getRandomQuestion = () => {
+        if (questions.length === 0) return '';
+        const randomIndex = Math.floor(Math.random() * questions.length);
+        return questions[randomIndex].title;
+    };
 
     return (
         <div className="home">
+            <div className="background">
+                {
+                    Array.from(Array(15).keys()).map((index) => (
+                        //Create a line that will directly has a style defined : the animation will be different for each line
+                        <div 
+                            key={index} 
+                            className={`scrolling-line`} 
+                            style={{ 
+                                animationDuration: `${Math.random() * 5 + 5}s`, 
+                                left: `${Math.random() * 100}vw`,
+                            }}
+                        >
+                            {getRandomQuestion()}
+                        </div>
+                        )
+                    )
+                }
+            
+
+            </div>
+            {/* <div className="overlay-gradient"></div> */}
+            <Navbar />
             <h1>Bienvenue</h1>
             <Link to="/quiz">
                 <button className="startButton">Commencer le quiz</button>
             </Link>
-            {isAdmin && ( 
-                <Link to="/admin">
-                <button className="adminButton">Admin</button>
-                </Link>
-            )}
-            <button className="logoutButton" onClick={handleLogout}>Déconnexion</button>
+            <h2>Thèmes</h2>
+            <div className="themes">
+                {themes.map(theme => (
+                    <Link to={`/quiz/${theme._id}`} key={theme._id}>
+                        <div className="theme">
+                            <h3>{theme.title}</h3>
+                            <p>Nombre de questions: {theme.questions.length}</p>
+                        </div>
+                    </Link>
+                ))}
+            </div>
         </div>
     );
 };

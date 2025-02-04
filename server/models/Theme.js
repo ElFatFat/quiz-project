@@ -6,4 +6,9 @@ const themeSchema = new mongoose.Schema({
   questions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Questions' }] // Reference to Question model
 });
 
+themeSchema.methods.addQuestion = async function (questionId) {
+  this.questions.push(questionId);
+  await this.save();
+};
+
 module.exports = mongoose.model('Themes', themeSchema);

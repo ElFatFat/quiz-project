@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Score = require('../models/score');
+const isTokenAdmin = require('../middlewares/auth');
 
-router.post('/add', async (req, res) => {
+
+router.post('/', async (req, res) => {
   try {
     const { user, theme, score } = req.body;
     const newScore = new Score({ user, theme, score });

@@ -258,7 +258,7 @@ wss.on("connection", (ws) => {
                         );
                         //Send list of themes to the new admin
                         try {
-                            const themes = await Theme.find({});
+                            const themes = await Theme.find({ questions: { $exists: true, $not: { $size: 0 } } });
                             rooms[ws.room].admin.send(
                                 JSON.stringify({ type: "themesList", themes })
                             );

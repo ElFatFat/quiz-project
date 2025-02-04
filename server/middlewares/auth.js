@@ -12,7 +12,7 @@ const authenticateToken = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (ex) {
-    res.status(400).json({ message: 'Invalid token.' });
+    res.status(401).json({ message: 'Invalid token.' });
   }
 };
 
@@ -30,7 +30,7 @@ const isTokenAdmin = async (req, res, next) => {
     next();
   } catch (ex) {
     console.log(ex);
-    res.status(400).json({ message: 'Invalid token.' });
+    res.status(401).json({ message: 'Invalid token.' });
   }
 };
 
