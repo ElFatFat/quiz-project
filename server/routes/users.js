@@ -74,4 +74,14 @@ router.get('/isAdmin', authenticateToken, async (req, res) => {
   }
 });
 
+//return basic user information
+router.get('/me', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('email username');
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 module.exports = router;
