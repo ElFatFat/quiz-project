@@ -57,7 +57,13 @@ async function handleThemeSelection(room, themeTitle) {
             "questions"
         );
         if (!theme) {
-            console.error(`No theme found with title: ${themeTitle}`);
+            //send the error to the admin
+            rooms[room].admin.send(
+                JSON.stringify({
+                    type: "error",
+                    message: `No theme found with title: ${themeTitle}`,
+                })
+            );
             return;
         }
 
@@ -66,6 +72,19 @@ async function handleThemeSelection(room, themeTitle) {
             `Questions for theme ${themeTitle}:`,
             fullListOfPossibleQuestions
         );
+
+        //Send the informations to the clients
+        rooms[room].clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(
+                    JSON.stringify({
+                        room,
+                        type: "theme",
+                        message: `The theme selected is ${themeTitle}`,
+                    })
+                );
+            }
+        });
         // You can now use fullListOfPossibleQuestions as needed
     } catch (error) {
         console.error(
@@ -94,11 +113,13 @@ async function handleQuizFlow(room) {
         const question = questions[i];
         rooms[room].currentQuestionIndex = i;
 
+        
         // Send the current question to all clients
+        let questionToSend = { "title": question.title, "possibleAnswers": question.possibleAnswers };
         rooms[room].clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
                 client.send(
-                    JSON.stringify({ room, type: "question", question })
+                    JSON.stringify({ room, type: "question", question: questionToSend })
                 );
             }
         });
@@ -108,6 +129,23 @@ async function handleQuizFlow(room) {
             setTimeout(() => {
                 resolve();
             }, TIME_LIMIT); // 1 minute time limit for example
+        });
+
+                // Send the correct answer to all clients
+        rooms[room].clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify({ room, type: "stopQuestion"}));
+            client.send(
+              JSON.stringify({ room, type: "correctAnswer", correctAnswer: correctAnswers[i] })
+            );
+          }
+        });
+
+        // Wait for 5 seconds before sending the next question
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve();
+          }, 5000); // 5 seconds delay
         });
 
         // Process answers
@@ -129,10 +167,7 @@ async function handleQuizFlow(room) {
         let score = 0;
 
         correctAnswers.forEach((correctAnswer, index) => {
-          console.log("playerAnswers[index]", playerAnswers[index]);
-          console.log("correctAnswer[index]", correctAnswers[index]);
             if (playerAnswers[index] == correctAnswers[index]) {
-              console.log("score++");
                 score++;
             }
         });
@@ -177,6 +212,7 @@ wss.on("connection", (ws) => {
         console.log("Received message:", parsedMessage);
         console.log("Room:", room);
         console.log("Type:", type);
+        console.log("Data:", data);
 
         switch (type) {
             case "join":
@@ -185,6 +221,16 @@ wss.on("connection", (ws) => {
                         JSON.stringify({
                             type: "error",
                             message: "Room is required",
+                        })
+                    );
+                    break;
+                }
+
+                if (!data) {
+                    ws.send(
+                        JSON.stringify({
+                            type: "error",
+                            message: "Player name is required",
                         })
                     );
                     break;
@@ -210,6 +256,20 @@ wss.on("connection", (ws) => {
                                 message: "You are the new admin of this room.",
                             })
                         );
+                        //Send list of themes to the new admin
+                        try {
+                            const themes = await Theme.find({});
+                            rooms[ws.room].admin.send(
+                                JSON.stringify({ type: "themesList", themes })
+                            );
+                        } catch (error) {
+                            rooms[ws.room].admin.send(
+                                JSON.stringify({
+                                    type: "error",
+                                    message: "Failed to fetch themes",
+                                })
+                            );
+                        }
                     }
                 }
 
@@ -231,6 +291,7 @@ wss.on("connection", (ws) => {
                 rooms[room].namesOfPlayers.push(data);
                 ws.room = room;
 
+                ws.send(JSON.stringify({ type: "succesJoin", room }));
                 if (!rooms[room].admin) {
                     rooms[room].admin = ws;
                     ws.isAdmin = true;
@@ -240,6 +301,19 @@ wss.on("connection", (ws) => {
                             message: "You are the admin of this room.",
                         })
                     );
+                    try {
+                      const themes = await Theme.find({});
+                      rooms[ws.room].admin.send(
+                          JSON.stringify({ type: "themesList", themes })
+                      );
+                  } catch (error) {
+                      rooms[ws.room].admin.send(
+                          JSON.stringify({
+                              type: "error",
+                              message: "Failed to fetch themes",
+                          })
+                      );
+                  }
                 } else {
                     ws.isAdmin = false;
                 }
@@ -392,7 +466,7 @@ wss.on("connection", (ws) => {
                         rooms[room].answers[playerName][questionIndex] = answer;
                         ws.send(
                             JSON.stringify({
-                                type: "success",
+                                type: "successAnswer",
                                 message: "Answer registered.",
                             })
                         );
