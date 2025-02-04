@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Theme = require('../models/theme');
+const isTokenAdmin = require('../middlewares/auth');
 
-router.post('/add', async (req, res) => {
+
+router.post('/', isTokenAdmin, async (req, res) => {
   try {
     const { title, questions } = req.body;
     const newTheme = new Theme({ title, questions });
@@ -51,7 +53,7 @@ router.get('/random/:id', async (req, res) => {
   });
 
 //update a theme
-router.put('/:id', async (req, res) => {
+router.put('/:id', isTokenAdmin, async (req, res) => {
   try {
     const { title, questions } = req.body;
     const theme = await Theme.findByIdAndUpdate(req.params.id, { title, questions }, { new: true });
@@ -65,12 +67,29 @@ router.put('/:id', async (req, res) => {
 });
 
 //delete a theme
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', isTokenAdmin, async (req, res) => {
   try {
     const theme = await Theme.findByIdAndDelete(req.params.id);
     if (!theme) {
       return res.status(404).json({ message: 'Theme not found' });
     }
+    res.status(200).json(theme);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.put('/:id/addQuestion',isTokenAdmin, async (req, res) => {
+  try {
+    const theme = await Theme.findById(req.params.id);
+    if (!theme) {
+      return res.status(404).json({ message: 'Theme not found' });
+    }
+
+    const { questionId } = req.body;
+    theme.questions.push(questionId);
+    await theme.save();
+
     res.status(200).json(theme);
   } catch (error) {
     res.status(400).json({ error: error.message });

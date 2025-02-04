@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const Question = require('../models/Question');
+const Theme = require('../models/theme');
+const isTokenAdmin = require('../middlewares/auth');
+
 
 
 //Add a question
-router.post('/add', async (req, res) => {
+router.post('/', isTokenAdmin, async (req, res) => {
   try {
     const { title, possibleAnswers, correctAnswerIndex } = req.body;
     const newQuestion = new Question({ title, possibleAnswers, correctAnswerIndex });
@@ -34,14 +37,23 @@ router.get('/:id', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const questions = await Question.find();
-    res.status(200).json(questions);
+
+    // Find themes for each question
+    const questionsWithThemes = await Promise.all(
+      questions.map(async (question) => {
+        const theme = await Theme.findOne({ questions: question._id }).select('title');
+        return { ...question.toObject(), theme };
+      })
+    );
+
+    res.status(200).json(questionsWithThemes);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
 
 //update a question
-router.put('/:id', async (req, res) => {
+router.put('/:id', isTokenAdmin, async (req, res) => {
   try {
     const { title, possibleAnswers, correctAnswerIndex } = req.body;
     const question = await Question.findByIdAndUpdate(req.params.id, { title, possibleAnswers, correctAnswerIndex }, { new: true });
@@ -55,12 +67,19 @@ router.put('/:id', async (req, res) => {
 });
 
 //delete a question
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', isTokenAdmin, async (req, res) => {
   try {
     const question = await Question.findByIdAndDelete(req.params.id);
+
+
     if (!question) {
       return res.status(404).json({ message: 'Question not found' });
     }
+    await Theme.updateMany(
+      { questions: req.params.id },
+      { $pull: { questions: req.params.id } }
+    );
+
     res.status(200).json(question);
   } catch (error) {
     res.status(400).json({ error: error.message });

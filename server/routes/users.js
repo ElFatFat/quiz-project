@@ -2,6 +2,8 @@ let express = require('express');
 let router = express.Router();
 let User = require('../models/User');
 const authenticateToken = require('../middlewares/auth');
+const isTokenAdmin = require('../middlewares/auth');
+
 
 /* GET users listing. */
 router.get('/', authenticateToken, function(req, res, next) {

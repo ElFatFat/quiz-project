@@ -1,0 +1,99 @@
+.navbar {
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #646cff;
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    vertical-align: middle;
+
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-inline: 1rem;
+}
+
+.navbar-brand a {
+    color: #fff;
+    text-decoration: none;
+    width: fit-content;
+}
+
+.navbar-menu {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.navbar-menu a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 1rem;
+}
+
+.navbar-name {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: #646cff;
+    font-weight: 700;
+    position: relative;
+    padding-inline: 1rem;
+
+
+    img {
+        width: 30px;
+        height: 30px;
+        margin-right: 0.5rem;
+    }
+}
+
+.popover-menu {
+    position: absolute;
+    top: 90%;
+    right: 0.8rem;
+    background-color: #fff;
+    color: #000;
+    border-radius: 10px;
+    padding: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.popover-menu p {
+    margin: 0;
+    padding: 0.5rem 0;
+}
+
+.popover-menu a {
+    color: #1a1a1a;
+    text-decoration: none;
+    padding: 0.5rem 0;
+    width: 100%;
+}
+
+.popover-menu a:hover {
+    background-color: #f0f0f0;
+}
+
+.popover-menu .line {
+    width: 100%;
+    border-top: 1.5px solid #646cff;
+}
+
+.popover-menu .logout {
+    color: #ff0000;
+    font-weight: 700;
+}
