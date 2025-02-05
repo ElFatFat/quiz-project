@@ -44,8 +44,12 @@ const Quiz = () => {
             //ici que tu recevras des messages
             const message = JSON.parse(event.data);
 
-            if (message.type === 'admin' || message.type === 'succesJoin') {
+            if (message.type === 'succesJoin') {
                 setIsConnected(true);
+                console.log('Connected:', message.type);
+            }
+
+            if (message.type === 'admin') {
                 setIsAdmin(true);
                 console.log('Admin:', message.type);
             }
