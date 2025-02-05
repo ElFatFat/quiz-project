@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "../assets/styles/AdminQuiz.css";
 import Navbar from "../components/Navbar";
+import Pill from "../components/Pill";
 
 const token = localStorage.getItem("token");
 
@@ -130,71 +131,73 @@ const AdminQuiz = () => {
                     </div>
                     <div className="inputs">
                         <div className="input-container">
-
-                        <label htmlFor="title">Titre de la question</label>
-                        <input
-                            type="text"
-                            value={newQuestion.title}
-                            onChange={(e) =>
-                                setNewQuestion({
-                                    ...newQuestion,
-                                    title: e.target.value,
-                                })
-                            }
+                            <label htmlFor="title">Titre de la question</label>
+                            <input
+                                type="text"
+                                value={newQuestion.title}
+                                onChange={(e) =>
+                                    setNewQuestion({
+                                        ...newQuestion,
+                                        title: e.target.value,
+                                    })
+                                }
                             />
                         </div>
                         <div className="input-container">
-
-                        <label htmlFor="possibleAnswers">Réponses possibles (séparées par un ;)</label>
-                        <textarea
-                            placeholder="Oui;Non;Test;Beaucoup"
-                            value={newQuestion.possibleAnswers.join(";")}
-                            onChange={(e) =>
-                                setNewQuestion({
-                                    ...newQuestion,
-                                    possibleAnswers: e.target.value.split(";"),
-                                })
-                            }
+                            <label htmlFor="possibleAnswers">
+                                Réponses possibles
+                            </label>
+                            <textarea
+                                placeholder="Oui;Non;Test;Beaucoup"
+                                value={newQuestion.possibleAnswers.join(";")}
+                                onChange={(e) =>
+                                    setNewQuestion({
+                                        ...newQuestion,
+                                        possibleAnswers:
+                                            e.target.value.split(";"),
+                                    })
+                                }
                             />
                         </div>
                         <div className="input-container">
-
-                        <label htmlFor="correctAnswerIndex">Index de la réponse correcte</label>
-                        <input
-                            type="number"
-                            placeholder="0 - 3"
-                            value={newQuestion.correctAnswerIndex}
-                            onChange={(e) =>
-                                setNewQuestion({
-                                    ...newQuestion,
-                                    correctAnswerIndex: parseInt(
-                                        e.target.value
-                                    ),
-                                })
-                            }
-                            max="3"
-                            min="0"
+                            <label htmlFor="correctAnswerIndex">
+                                Index de la réponse correcte
+                            </label>
+                            <input
+                                type="number"
+                                placeholder="0 - 3"
+                                value={newQuestion.correctAnswerIndex}
+                                onChange={(e) =>
+                                    setNewQuestion({
+                                        ...newQuestion,
+                                        correctAnswerIndex: parseInt(
+                                            e.target.value
+                                        ),
+                                    })
+                                }
+                                max="3"
+                                min="0"
                             />
                         </div>
                         <div className="input-container">
-                        <label htmlFor="theme">Thème</label>
-                        <select
-                            value={newQuestion.theme}
-                            onChange={(e) =>
-                                setNewQuestion({
-                                    ...newQuestion,
-                                    theme: e.target.value,
-                                })
-                            }
+                            <label htmlFor="theme">Thème</label>
+                            <select
+                                value={newQuestion.theme}
+                                onChange={(e) =>
+                                    setNewQuestion({
+                                        ...newQuestion,
+                                        theme: e.target.value,
+                                    })
+                                }
                             >
-                            <option value="">Sélectionner un thème</option>
-                            {themes.map((theme) => (
-                                <option key={theme._id} value={theme._id}>
-                                    {theme.title}
-                                </option>
-                            ))}
-                        </select>
-                            </div>
+                                <option value="">Sélectionner un thème</option>
+                                {themes.map((theme) => (
+                                    <option key={theme._id} value={theme._id}>
+                                        {theme.title}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
                     <div>
                         <button onClick={addQuestion}>Ajouter</button>
@@ -205,24 +208,40 @@ const AdminQuiz = () => {
             <div className="questionsAdminContainer">
                 {questions.map((question, index) => (
                     <div key={index} className="questionAdminContainer">
-                        <div className="questionAdminContainerInformations">
-                            
-
-                            <h3>{question.title}</h3>
-                            <p>{question.possibleAnswers.join(", ")}</p>
-                            <p>{question.theme?.title || "Aucun thème attribué"}</p>
+                        <div className="themeHeader">
+                            {question.theme?.title || "Aucun thème attribué"}
                         </div>
-                        <div className="questionAdminContainerButtons">
-
-                        <button onClick={() => setEditQuestion(question)}>
-                            Modifier
-                        </button>
-                        <button
-                            className="deleteButton"
-                            onClick={() => deleteQuestion(question._id)}
-                        >
-                            Supprimer
-                        </button>
+                        <div className="questionAdminContainerInformations">
+                            <div>
+                                <h3>{question.title}</h3>
+                                <div className="pillContainer">
+                                    {question.possibleAnswers.map(
+                                        (answer, index) => (
+                                            <Pill
+                                                key={index}
+                                                text={answer}
+                                                goodAnswer={
+                                                    index ===
+                                                    question.correctAnswerIndex
+                                                }
+                                            />
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                            <div className="questionAdminContainerButtons">
+                                <button
+                                    onClick={() => setEditQuestion(question)}
+                                >
+                                    Modifier
+                                </button>
+                                <button
+                                    className="deleteButton"
+                                    onClick={() => deleteQuestion(question._id)}
+                                >
+                                    Supprimer
+                                </button>
+                            </div>
                         </div>
                     </div>
                 ))}
@@ -233,65 +252,88 @@ const AdminQuiz = () => {
                         <h2>Question à modifier</h2>
                     </div>
                     <div className="inputs">
+                        <div className="input-container">
+                            <label htmlFor="title">Titre de la question</label>
+                            <input
+                                type="text"
+                                value={editQuestion.title}
+                                onChange={(e) =>
+                                    setEditQuestion({
+                                        ...editQuestion,
+                                        title: e.target.value,
+                                    })
+                                }
+                            />
+                        </div>
 
-                    <input
-                        type="text"
-                        placeholder="Titre de la question"
-                        value={editQuestion.title}
-                        onChange={(e) =>
-                            setEditQuestion({
-                                ...editQuestion,
-                                title: e.target.value,
-                            })
-                        }
-                        />
-                    <textarea
-                        placeholder="Réponses possibles (séparées par des virgules)"
-                        value={editQuestion.possibleAnswers.join(";")}
-                        onChange={(e) =>
-                            setEditQuestion({
-                                ...editQuestion,
-                                possibleAnswers: e.target.value.split(";"),
-                            })
-                        }
-                        />
-                    <input
-                        type="number"
-                        placeholder="Index de la réponse correcte"
-                        value={editQuestion.correctAnswerIndex}
-                        onChange={(e) =>
-                            setEditQuestion({
-                                ...editQuestion,
-                                correctAnswerIndex: parseInt(e.target.value),
-                            })
-                        }
-                        />
-                    <select
-                        value={editQuestion.theme}
-                        onChange={(e) =>
-                            setEditQuestion({
-                                ...editQuestion,
-                                theme: e.target.value,
-                            })
-                        }
+                        <div className="input-container">
+                            <label htmlFor="possibleAnswers">
+                                Réponses possibles
+                            </label>
+                            <textarea
+                                placeholder="Oui;Non;Test;Beaucoup"
+                                value={editQuestion.possibleAnswers.join(";")}
+                                onChange={(e) =>
+                                    setEditQuestion({
+                                        ...editQuestion,
+                                        possibleAnswers:
+                                            e.target.value.split(";"),
+                                    })
+                                }
+                            />
+                        </div>
+
+                        <div className="input-container">
+                            <label htmlFor="correctAnswerIndex">
+                                Index de la réponse correcte
+                            </label>
+                            <input
+                                type="number"
+                                value={editQuestion.correctAnswerIndex}
+                                onChange={(e) =>
+                                    setEditQuestion({
+                                        ...editQuestion,
+                                        correctAnswerIndex: parseInt(
+                                            e.target.value
+                                        ),
+                                    })
+                                }
+                            />
+                        </div>
+                        <div className="input-container">
+                            <label htmlFor="theme">Thème</label>
+                            <select
+                                value={editQuestion.theme}
+                                onChange={(e) =>
+                                    setEditQuestion({
+                                        ...editQuestion,
+                                        theme: e.target.value,
+                                    })
+                                }
+                            >
+                                <option value="">Sélectionner un thème</option>
+                                {themes.map((theme) => (
+                                    <option key={theme._id} value={theme._id}>
+                                        {theme.title}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                    <div className="button-edit-container">
+                        <button
+                            onClick={() => updateQuestion(editQuestion._id)}
+                            className="updateButton"
                         >
-                        <option value="">Sélectionner un thème</option>
-                        {themes.map((theme) => (
-                            <option key={theme._id} value={theme._id}>
-                                {theme.title}
-                            </option>
-                        ))}
-                    </select>
-                        </div>
-                        <div className="button-edit-container">
-
-                    <button onClick={() => updateQuestion(editQuestion._id)} className="updateButton">
-                        Mettre à jour
-                    </button>
-                    <button onClick={() => setEditQuestion(null)} className="cancelButton">
-                        Annuler
-                    </button>
-                        </div>
+                            Mettre à jour
+                        </button>
+                        <button
+                            onClick={() => setEditQuestion(null)}
+                            className="cancelButton"
+                        >
+                            Annuler
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

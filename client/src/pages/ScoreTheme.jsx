@@ -42,7 +42,7 @@ const ScoreTheme = () => {
             <h1>Scores for Theme: {themeID}</h1>
             <div className="history">
                 {scores.map((score,  index) => (
-                    <Score key={index} theme={score.theme.title} score={score.score} maxScore={score.maxScore} date={score.createdAt} _id={score._id} username={score.user.username} />
+                    <Score key={index} theme={score.theme.title} score={score.score} maxScore={score.maxScore} date={score.createdAt} _id={score._id} username={score.user?.username ?? 'Not found'} />
                 ))}
             </div>
         </div>
