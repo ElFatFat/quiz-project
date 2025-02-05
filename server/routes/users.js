@@ -1,6 +1,8 @@
 let express = require('express');
 let router = express.Router();
 let User = require('../models/User');
+const bcrypt = require('bcrypt');
+
 const { authenticateToken, isTokenAdmin } = require('../middlewares/auth');
 
 
@@ -79,13 +81,38 @@ router.get('/isAdmin', authenticateToken, async (req, res) => {
 
 //return basic user information
 router.get('/me', authenticateToken, async (req, res) => {
-  console.log("hey");
   try {
-    console.log("hey");
     const user = await User.findById(req.user.userId).select('email username');
     res.status(200).json(user);
   } catch (error) {
     console.log(error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.put('/', authenticateToken, async (req, res) => {
+  const updates = req.body;
+  const userId = req.user.userId;
+
+  try {
+  // If password is provided, hash it before updating
+  if (updates.password) {
+    const salt = await bcrypt.genSalt(10);
+    let saltedPassword = await bcrypt.hash(updates.password, salt);
+
+    const user = await User.findByIdAndUpdate(userId, { password: saltedPassword }, { new: true });
+  }
+
+  if(updates.email){
+    const user = await User.findByIdAndUpdate(userId, { email: updates.email }, { new: true, runValidators: true });
+  }
+
+  if(updates.username){
+    const user = await User.findByIdAndUpdate(userId, { username: updates.username }, { new: true, runValidators: true });
+  }
+
+    res.status(200).json({ message: 'User updated' });
+  } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });

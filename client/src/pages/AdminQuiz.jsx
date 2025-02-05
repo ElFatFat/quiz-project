@@ -212,7 +212,7 @@ const AdminQuiz = () => {
                             {question.theme?.title || "Aucun thème attribué"}
                         </div>
                         <div className="questionAdminContainerInformations">
-                            <div>
+                            <div className="questionAdminContainerText">
                                 <h3>{question.title}</h3>
                                 <div className="pillContainer">
                                     {question.possibleAnswers.map(

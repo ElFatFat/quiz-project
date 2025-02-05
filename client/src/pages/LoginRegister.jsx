@@ -32,8 +32,8 @@ const LoginRegister = () => {
         }
         if (!password) {
             newErrors.password = 'Mot de passe est requis';
-        } else if (password.length < 6) {
-            newErrors.password = 'Mot de passe doit contenir au moins 6 caractères';
+        } else if (password.length < 4) {
+            newErrors.password = 'Mot de passe doit contenir au moins 4 caractères';
         }
         if (!isLogin && password !== confirmPassword) {
             newErrors.confirmPassword = 'Les mots de passe ne correspondent pas';
