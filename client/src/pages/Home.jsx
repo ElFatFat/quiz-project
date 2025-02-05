@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from "../components/Navbar";
-
+import '../assets/styles/home.css';
 
 const Home = () => {
     const [isAdmin, setIsAdmin] = useState(false);
@@ -65,7 +65,8 @@ const Home = () => {
             <Navbar />
             <h1>Bienvenue</h1>
             <Link to="/quiz">
-                <button className="startButton">Commencer le quiz</button>
+                <button className="startButton">
+                    <h2>Jouer !</h2></button>
             </Link>
             <h2>Thèmes</h2>
             <div className="themes">

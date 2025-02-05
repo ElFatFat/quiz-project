@@ -129,9 +129,11 @@ const AdminQuiz = () => {
                         <h2>Ajouter une question</h2>
                     </div>
                     <div className="inputs">
+                        <div className="input-container">
+
+                        <label htmlFor="title">Titre de la question</label>
                         <input
                             type="text"
-                            placeholder="Titre de la question"
                             value={newQuestion.title}
                             onChange={(e) =>
                                 setNewQuestion({
@@ -139,9 +141,13 @@ const AdminQuiz = () => {
                                     title: e.target.value,
                                 })
                             }
-                        />
+                            />
+                        </div>
+                        <div className="input-container">
+
+                        <label htmlFor="possibleAnswers">Réponses possibles (séparées par un ;)</label>
                         <textarea
-                            placeholder="Réponses possibles (séparées par un ;)"
+                            placeholder="Oui;Non;Test;Beaucoup"
                             value={newQuestion.possibleAnswers.join(";")}
                             onChange={(e) =>
                                 setNewQuestion({
@@ -149,10 +155,14 @@ const AdminQuiz = () => {
                                     possibleAnswers: e.target.value.split(";"),
                                 })
                             }
-                        />
+                            />
+                        </div>
+                        <div className="input-container">
+
+                        <label htmlFor="correctAnswerIndex">Index de la réponse correcte</label>
                         <input
                             type="number"
-                            placeholder="Index de la réponse correcte"
+                            placeholder="0 - 3"
                             value={newQuestion.correctAnswerIndex}
                             onChange={(e) =>
                                 setNewQuestion({
@@ -164,7 +174,10 @@ const AdminQuiz = () => {
                             }
                             max="3"
                             min="0"
-                        />
+                            />
+                        </div>
+                        <div className="input-container">
+                        <label htmlFor="theme">Thème</label>
                         <select
                             value={newQuestion.theme}
                             onChange={(e) =>
@@ -173,7 +186,7 @@ const AdminQuiz = () => {
                                     theme: e.target.value,
                                 })
                             }
-                        >
+                            >
                             <option value="">Sélectionner un thème</option>
                             {themes.map((theme) => (
                                 <option key={theme._id} value={theme._id}>
@@ -181,6 +194,7 @@ const AdminQuiz = () => {
                                 </option>
                             ))}
                         </select>
+                            </div>
                     </div>
                     <div>
                         <button onClick={addQuestion}>Ajouter</button>
@@ -188,12 +202,18 @@ const AdminQuiz = () => {
                 </div>
             )}
 
-            <div className="questions">
+            <div className="questionsAdminContainer">
                 {questions.map((question, index) => (
-                    <div key={index} className="question">
-                        <h3>{question.title}</h3>
-                        <p>{question.possibleAnswers.join(", ")}</p>
-                        <p>{question.theme?.title || "Aucun thème attribué"}</p>
+                    <div key={index} className="questionAdminContainer">
+                        <div className="questionAdminContainerInformations">
+                            
+
+                            <h3>{question.title}</h3>
+                            <p>{question.possibleAnswers.join(", ")}</p>
+                            <p>{question.theme?.title || "Aucun thème attribué"}</p>
+                        </div>
+                        <div className="questionAdminContainerButtons">
+
                         <button onClick={() => setEditQuestion(question)}>
                             Modifier
                         </button>
@@ -203,6 +223,7 @@ const AdminQuiz = () => {
                         >
                             Supprimer
                         </button>
+                        </div>
                     </div>
                 ))}
             </div>
@@ -262,21 +283,17 @@ const AdminQuiz = () => {
                         ))}
                     </select>
                         </div>
-                        <div>
+                        <div className="button-edit-container">
 
-                    <button onClick={() => updateQuestion(editQuestion._id)}>
+                    <button onClick={() => updateQuestion(editQuestion._id)} className="updateButton">
                         Mettre à jour
                     </button>
-                    <button onClick={() => setEditQuestion(null)}>
+                    <button onClick={() => setEditQuestion(null)} className="cancelButton">
                         Annuler
                     </button>
                         </div>
                 </div>
             )}
-
-            <Link to="/home">
-                <button className="startButton">Retour à l'accueil</button>
-            </Link>
         </div>
     );
 };
