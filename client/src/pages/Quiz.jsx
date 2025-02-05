@@ -29,7 +29,30 @@ const Quiz = () => {
     const [isQuestionStopped, setIsQuestionStopped] = useState(false);
     const [score, setScore] = useState(0);
     const [isGameFinished, setIsGameFinished] = useState(false);
+    const [scoreboard, setScoreboard] = useState([]);
+    const [isSolo, setIsSolo] = useState(true);
 
+    const generateRoomName = () => {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let result = '';
+        for (let i = 0; i < 4; i++) {
+            result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return result;
+    };
+
+    useEffect(() => {
+        const roomName = generateRoomName();
+        setRoom(roomName);
+    }, []);
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(room).then(() => {
+            alert('Nom du salon copié dans le presse-papiers');
+        }).catch(err => {
+            console.error('Erreur lors de la copie dans le presse-papiers:', err);
+        });
+    };
 
     useEffect(() => {
         // Establish WebSocket connection
@@ -99,6 +122,17 @@ const Quiz = () => {
 
             if (message.type === 'theme') {
                 setCurrentTheme(message.message);
+            }
+
+            if (message.type === 'scoreboard') {
+                console.log('Scoreboard:', message.scoreboard);
+                const scoresArray = Object.entries(message.scores);
+                setScoreboard(scoresArray);
+                if (scoresArray.length === 1) {
+                    setIsSolo(true);
+                } else {
+                    setIsSolo(false);
+                }
             }
 
             console.log('Received message:', message);
@@ -233,8 +267,30 @@ const Quiz = () => {
                         <>
                             <div className="overlay"></div>
                             <div className="scoreContainer">
-                                <h2>Fin de la partie</h2>
-                                <h2>Score: {score.playerScore}/{score.maxScore}</h2>
+                                <h1>Fin de la partie</h1>   
+                                <div className="scoreWrapper">
+                                    <div className="soloScore">
+                                        <h2>Score personnel :</h2>
+                                        <h2>Score: {score.playerScore}/{score.maxScore}</h2>
+                                    </div>
+                                    {!isSolo && (
+                                        <>
+                                        <div className="lineSeparator"></div>
+                                        <div className="multiScore">
+                                        <h2>Score des joueurs :</h2>
+                                        <ul>
+                                            {scoreboard
+                                                .sort((a, b) => b[1] - a[1])
+                                                .map(([player, playerScore], index) => (
+                                                    <li key={index}>
+                                                        {index + 1}. {player}: {playerScore}
+                                                    </li>
+                                            ))}
+                                        </ul>
+                                        </div>
+                                        </>
+                                    )}
+                                </div>
                                 <Link to="/home">Retour à l'accueil</Link>
                             </div>
                         </>
@@ -257,7 +313,7 @@ const Quiz = () => {
                                 ))}
                             </select>
                             <button onClick={handleSelectTheme} disabled={selectedValue === 'default'}>Choisir le thème</button>
-                            <button className="startButton" onClick={() => ws.send(JSON.stringify({ type: "startGame", room: room }))} disabled={!isThemeSelected}>Lancer la partie</button>
+                            <button className="startGameButton" onClick={() => ws.send(JSON.stringify({ type: "startGame", room: room }))} disabled={!isThemeSelected}>Lancer la partie</button>
                         </div>
                     )}
                 </div>
@@ -266,7 +322,10 @@ const Quiz = () => {
             {!isConnected && (
                 <div className="joinContainer">
                     {/* <input type="text" placeholder="Type" value={type} onChange={(e) => setType(e.target.value)} /> */}
-                    <input type="text" placeholder="Nom du salon" value={room} onChange={(e) => setRoom(e.target.value)} />
+                    <div className="roomContainer">
+                        <input type="text" placeholder={room} value={room} onChange={(e) => setRoom(e.target.value)} />
+                        <button onClick={copyToClipboard}>Copier</button>
+                    </div>
                     <button onClick={() => ws.send(JSON.stringify({ type: "join", room: room, data: username }))}>Rejoindre la partie</button> 
                 </div>
             )}
