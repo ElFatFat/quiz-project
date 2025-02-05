@@ -82,7 +82,7 @@ async function handleThemeSelection(room, themeTitle) {
                     JSON.stringify({
                         room,
                         type: "theme",
-                        message: `The theme selected is ${themeTitle}`,
+                        message: `${themeTitle}`,
                     })
                 );
             }
@@ -130,11 +130,26 @@ async function handleQuizFlow(room) {
         await new Promise((resolve) => {
             setTimeout(() => {
                 resolve();
-            }, TIME_LIMIT); // 1 minute time limit for example
+            }, TIME_LIMIT);
         });
 
                 // Send the correct answer to all clients
         rooms[room].clients.forEach((client) => {
+
+            const playerName = rooms[room].namesOfPlayers.find(
+                (name) =>
+                    client ===
+                    rooms[room].clients[
+                        rooms[room].namesOfPlayers.indexOf(name)
+                    ]
+            );
+            if (!rooms[room].answers[playerName]) {
+                rooms[room].answers[playerName] = {};
+            }
+            if (rooms[room].answers[playerName][i] === undefined) {
+                rooms[room].answers[playerName][i] = -1;
+            }
+            
           if (client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify({ room, type: "stopQuestion"}));
             client.send(
@@ -169,7 +184,7 @@ async function handleQuizFlow(room) {
         let score = 0;
 
         correctAnswers.forEach((correctAnswer, index) => {
-            if (playerAnswers[index] == correctAnswers[index]) {
+            if (playerAnswers[index] !== undefined && playerAnswers[index] == correctAnswers[index]) {
                 score++;
             }
         });
@@ -195,6 +210,21 @@ async function handleQuizFlow(room) {
                     score: {"playerScore": playerScore, "maxScore": correctAnswers.length},
                 })
             );
+
+            //Send scoreboard to the player
+            client.send(
+                JSON.stringify({
+                    room,
+                    type: "scoreboard",
+                    scores,
+                })
+            );
+
+            console.log(JSON.stringify({
+                room,
+                type: "scoreboard",
+                scores,
+            }));
         }
     });
     for (const playerName in scores) {

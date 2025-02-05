@@ -63,6 +63,67 @@ a {
     width: inherit;
 }
 
+.startButton {
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    position: relative;
+    background-color: #1a1a1a;
+    border: 1px solid #646cff;
+    color: #fff;
+    overflow: hidden;
+    transition: color 0.3s ease;
+    transition: transform 0.3s ease;
+    z-index: 1; /* Ensure the button is above the pseudo-element */
+}
+
+.startButton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #646cff 0%, #646cff 50%, transparent 50%, transparent 100%);
+    background-size: 200% 200%;
+    background-position: 100% 100%;
+    transition: background-position 0.5s ease;
+    z-index: 0;
+}
+
+.startButton:hover::before {
+    background-position: 0 0;
+}
+
+.startButton:hover {
+    color: #fff;
+    transform: scale(1.1);
+    animation: jiggle 1s ease infinite;
+}
+
+@keyframes jiggle {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(5deg);
+    }
+    50% {
+        transform: rotate(-5deg);
+    }
+    75% {
+        transform: rotate(5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.startButton > * {
+    position: relative;
+    z-index: 2; /* Ensure the text is above the pseudo-element */
+}
+
 .themes {
     width: 100%;
     display: grid;
@@ -109,5 +170,5 @@ a {
 
 .theme > * {
     position: relative;
-    z-index: 1; /* Ensure the text is above the pseudo-element */
+    z-index: 2; /* Ensure the text is above the pseudo-element */
 }
