@@ -68,13 +68,16 @@ h1,h2 {
         padding: 0;
         margin: 0;
         li {
-            padding: 10px;
-            margin: 10px;
-            border: 1px solid black;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: white;
-            color: black;
+            button{
+                width: 100%;
+                padding: 10px;
+                margin: 10px;
+                border: 1px solid black;
+                border-radius: 5px;
+                cursor: pointer;
+                background-color: white;
+                color: black;
+            }
         }
     }
 }
@@ -137,3 +140,19 @@ h1,h2 {
 .startButton {
     margin-top: 25px;
 }
+
+.timer {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 20px auto;
+  }
+  
+  .timer-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    font-weight: bold;
+  }
