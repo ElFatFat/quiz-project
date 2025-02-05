@@ -216,7 +216,7 @@ const Quiz = () => {
                         {isGameFinished && (
                             <div>
                                 <h2>Fin de la partie</h2>
-                                <h2>Score: {score} point(s)</h2>
+                                <h2>Score: {score.playerScore}/{score.maxScore}</h2>
                                 <Link to="/home">Retour à l'accueil</Link>
                             </div>
                         )}
@@ -247,14 +247,14 @@ const Quiz = () => {
                     <button onClick={() => ws.send(JSON.stringify({ type: "join", room: room, data: username }))}>Rejoindre la partie</button> 
                 </div>
             )}
-            <div className="messages">
+            {/* <div className="messages">
                 <h2>Messages:</h2>
                 <ul>
                     {messages.map((msg, index) => (
                         <li key={index}>{JSON.stringify(msg)}</li>
                     ))}
                 </ul>
-            </div>
+            </div> */}
         </div>
     );
 };
