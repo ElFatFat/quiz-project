@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const scoreSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to User model
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true }, // Reference to User model
   theme: { type: mongoose.Schema.Types.ObjectId, ref: 'Themes', required: true }, // Reference to Theme model
   score: { type: Number, required: true },
   maxScore: { type: Number, required: true },

@@ -70,7 +70,7 @@ const Home = () => {
             <h2>Thèmes</h2>
             <div className="themes">
                 {themes.map(theme => (
-                    <Link to={`/quiz/${theme._id}`} key={theme._id}>
+                    <Link to={`/score/${theme._id}`} key={theme._id}>
                         <div className="theme">
                             <h3>{theme.title}</h3>
                             <p>Nombre de questions: {theme.questions.length}</p>

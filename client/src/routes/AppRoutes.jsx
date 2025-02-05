@@ -12,6 +12,7 @@ import AdminQuiz from "../pages/AdminQuiz";
 import AdminThemes from "../pages/AdminThemes";
 import Logout from "../pages/Logout";
 import History from "../pages/History";
+import ScoreTheme from "../pages/ScoreTheme";
 
 const AppRoutes = () => {
     return (
@@ -26,6 +27,7 @@ const AppRoutes = () => {
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/admin/quiz" element={<AdminQuiz />} />
                 <Route path="/admin/themes" element={<AdminThemes />} />
+                <Route path="/score/:themeID" element={<ScoreTheme />} />
             </Routes>
         </Router>
     );
