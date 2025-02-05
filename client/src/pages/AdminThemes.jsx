@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import '../assets/styles/AdminTheme.css';
 
 const token = localStorage.getItem('token');
 
@@ -55,7 +56,7 @@ const AdminThemes = () => {
     };
 
     return (
-        <div className="admin">
+        <div className="adminThemesContainer">
             <h1>Gestion des thèmes</h1>
 
             <div className="add-theme">
@@ -69,7 +70,7 @@ const AdminThemes = () => {
                 <button onClick={addTheme}>Ajouter</button>
             </div>
 
-            <div className="themes">
+            <div className="admin-themes">
                 {themes.map((theme, index) => (
                     <div key={index} className="theme">
                         <h3>{theme.title}</h3>
@@ -79,7 +80,7 @@ const AdminThemes = () => {
             </div>
 
             <Link to="/home">
-                <button className="startButton">Retour à l'accueil</button>
+                <button>Retour à l'accueil</button>
             </Link>
         </div>
     );
