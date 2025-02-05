@@ -18,7 +18,9 @@ const Quiz = () => {
     const [clickedButton, setClickedButton] = useState(null);
     const [correctAnswer, setCorrectAnswer] = useState(null);
     const [gameStarted, setGameStarted] = useState(false);
-    const [theme, setTheme] = useState('Pas de thème choisi');
+    const [theme, setTheme] = useState('pas de thème choisi');
+    const [currentTheme, setCurrentTheme] = useState('En attente de sélection...');
+    const [themes, setThemes] = useState([]);
     const [selectedValue, setSelectedValue] = useState('default');
     const [isThemeSelected, setIsThemeSelected] = useState(false);
     const [timeLeft, setTimeLeft] = useState(15);
@@ -27,6 +29,7 @@ const Quiz = () => {
     const [isQuestionStopped, setIsQuestionStopped] = useState(false);
     const [score, setScore] = useState(0);
     const [isGameFinished, setIsGameFinished] = useState(false);
+
 
     useEffect(() => {
         // Establish WebSocket connection
@@ -44,8 +47,12 @@ const Quiz = () => {
             //ici que tu recevras des messages
             const message = JSON.parse(event.data);
 
-            if (message.type === 'admin' || message.type === 'succesJoin') {
+            if (message.type === 'succesJoin') {
                 setIsConnected(true);
+                console.log('Connected:', message.type);
+            }
+
+            if (message.type === 'admin') {
                 setIsAdmin(true);
                 console.log('Admin:', message.type);
             }
@@ -83,6 +90,15 @@ const Quiz = () => {
             if (message.type === 'end') {
                 console.log('End of game');
                 setIsGameFinished(true);
+            }
+
+            if (message.type === 'themesList') {
+                console.log('Themes:', message.themes);
+                setThemes(message.themes);
+            }
+
+            if (message.type === 'theme') {
+                setCurrentTheme(message.message);
             }
 
             console.log('Received message:', message);
@@ -214,29 +230,36 @@ const Quiz = () => {
                             ))}
                         </ul>
                         {isGameFinished && (
-                            <div>
+                        <>
+                            <div className="overlay"></div>
+                            <div className="scoreContainer">
                                 <h2>Fin de la partie</h2>
                                 <h2>Score: {score.playerScore}/{score.maxScore}</h2>
                                 <Link to="/home">Retour à l'accueil</Link>
                             </div>
+                        </>
                         )}
                     </div>
                 )
             }
             {
-            isConnected && isAdmin && !gameStarted && (
+            isConnected && !gameStarted && (
                 <div className={`themeContainer`}>
                     <div className="themeChosenContainer">
-                        <h2>Thème choisi: {theme}</h2>
+                        <h2>{currentTheme !== 'En attente de sélection...' ? `Thème choisi: ${currentTheme}` : currentTheme}</h2>
                     </div>
-                    <div className="themeSelectorContainer">
-                        <select defaultValue={"default"} onChange={handleSelectChange} >
-                            <option disabled value="default">Choisissez un thème</option>
-                            <option value="Histoire">Histoire</option>
-                        </select>
-                        <button onClick={handleSelectTheme} disabled={selectedValue === 'default'}>Choisir le thème</button>
-                        <button className="startButton" onClick={() => ws.send(JSON.stringify({ type: "startGame", room: room }))} disabled={!isThemeSelected}>Lancer la partie</button>
-                    </div>
+                    {isAdmin && (
+                        <div className="themeSelectorContainer">
+                            <select defaultValue={"default"} onChange={handleSelectChange} >
+                                <option disabled value="default">Choisissez un thème</option>
+                                {themes.map((theme, index) => (
+                                    <option key={index} value={theme.title}>{theme.title}</option>
+                                ))}
+                            </select>
+                            <button onClick={handleSelectTheme} disabled={selectedValue === 'default'}>Choisir le thème</button>
+                            <button className="startButton" onClick={() => ws.send(JSON.stringify({ type: "startGame", room: room }))} disabled={!isThemeSelected}>Lancer la partie</button>
+                        </div>
+                    )}
                 </div>
                 )
             }
