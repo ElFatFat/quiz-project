@@ -11,6 +11,7 @@ import Admin from "../pages/Admin";
 import AdminQuiz from "../pages/AdminQuiz";
 import AdminThemes from "../pages/AdminThemes";
 import Logout from "../pages/Logout";
+import History from "../pages/History";
 
 const AppRoutes = () => {
     return (
@@ -21,6 +22,7 @@ const AppRoutes = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/quiz" element={<Quiz />} />
                 <Route path="/result" element={<Result />} />
+                <Route path="/history" element={<History />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/admin/quiz" element={<AdminQuiz />} />
                 <Route path="/admin/themes" element={<AdminThemes />} />

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import React, { useEffect, useState, useRef } from "react";
 import '../assets/styles/quiz.css';
 import axios from "axios";
+import Navbar from "../components/Navbar";
 
 const Quiz = () => {
 
@@ -170,6 +171,7 @@ const Quiz = () => {
 
     return (
         <div className="quiz">
+            <Navbar />
             <h1>Quiz</h1>
             <div>
                 <h2>{currentQuestion}</h2>
