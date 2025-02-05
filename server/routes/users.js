@@ -1,8 +1,7 @@
 let express = require('express');
 let router = express.Router();
 let User = require('../models/User');
-const authenticateToken = require('../middlewares/auth');
-const isTokenAdmin = require('../middlewares/auth');
+const { authenticateToken, isTokenAdmin } = require('../middlewares/auth');
 
 
 /* GET users listing. */
@@ -78,10 +77,13 @@ router.get('/isAdmin', authenticateToken, async (req, res) => {
 
 //return basic user information
 router.get('/me', authenticateToken, async (req, res) => {
+  console.log("hey");
   try {
+    console.log("hey");
     const user = await User.findById(req.user.userId).select('email username');
     res.status(200).json(user);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: error.message });
   }
 });

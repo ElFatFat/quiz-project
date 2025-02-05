@@ -6,6 +6,8 @@ const cors = require("cors");
 let path = require("path");
 let logger = require("morgan");
 const Theme = require("./models/theme");
+const Score = require("./models/score");
+const User = require("./models/User");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -190,11 +192,33 @@ async function handleQuizFlow(room) {
                     room,
                     type: "end",
                     message: "Quiz has ended.",
-                    score: playerScore,
+                    score: {"playerScore": playerScore, "maxScore": correctAnswers.length},
                 })
             );
         }
     });
+    for (const playerName in scores) {
+        try {
+            const user = await User.findOne({ username: playerName });
+            const theme = await Theme.findOne({ title: rooms[room].theme });
+            console.log("User found:", user._id);
+
+            if (user) {
+                const score = new Score({
+                    user: user._id,
+                    theme: theme._id,
+                    score: scores[playerName],
+                    maxScore: correctAnswers.length,
+                });
+                await score.save();
+                console.log(`Score saved for user ${playerName}`);
+            } else {
+                console.error(`User not found: ${playerName}`);
+            }
+        } catch (error) {
+            console.error(`Error saving score for user ${playerName}:`, error);
+        }
+    }
 
     rooms[room].currentState = "waiting";
     console.log("Quiz has ended");

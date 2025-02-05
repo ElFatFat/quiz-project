@@ -66,7 +66,7 @@ const Navbar = () => {
             setUsername(response.data.username);
             setEmail(response.data.email);
         } catch (error) {
-            if(error.status === 401) {
+            if(error.status !== 200) {
                 console.error('You are not connected');
                 navigate('/'); // Redirect to login page
 
@@ -95,7 +95,7 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-brand">
-                <Link to="/home">Quiz Project</Link>
+                <Link to="/home">Stuffy II</Link>
             </div>
             <div className="navbar-menu">
                 <Link to="/home">Liste des quiz</Link>

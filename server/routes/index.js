@@ -1,6 +1,6 @@
 let express = require('express');
 let router = express.Router();
-const isTokenAdmin = require('../middlewares/auth');
+const { authenticateToken, isTokenAdmin } = require('../middlewares/auth');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Theme = require('../models/theme');
-const isTokenAdmin = require('../middlewares/auth');
+const { authenticateToken, isTokenAdmin } = require('../middlewares/auth');
 
 
 router.post('/', isTokenAdmin, async (req, res) => {
