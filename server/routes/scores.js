@@ -32,7 +32,7 @@ router.get('/:themeID', authenticateToken, async (req, res) => {
   try {
     const themeID = req.params.themeID;
     const scores = await Score.find({ theme: themeID })
-      .populate('user', 'username') // Populate the user field and include only the username
+      .populate('user') // Populate the user field and include only the username
       .populate('theme', 'title') // Populate the theme field and include only the title
       .sort({ score: -1 }) // Sort by score in descending order
       .limit(10); // Limit to 10 scores

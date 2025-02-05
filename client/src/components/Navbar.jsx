@@ -98,8 +98,6 @@ const Navbar = () => {
                 <Link to="/home">Stuffy II</Link>
             </div>
             <div className="navbar-menu">
-                <Link to="/home">Liste des quiz</Link>
-                <Link to="/home">Classement général</Link>
             </div>
             <div 
                 className="navbar-name" 

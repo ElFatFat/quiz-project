@@ -24,7 +24,7 @@ form {
   gap: 5px;
 }
 
-label {
+.input-container label {
   position: absolute;
   top: -10px;
   left: 10px;
@@ -34,7 +34,7 @@ label {
   color: #646cff;
 }
 
-input {
+.input-container input {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #646cff;

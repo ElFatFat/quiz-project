@@ -1,200 +1,278 @@
 .add-question {
     position: fixed;
     left: 0;
+    margin-left: 20px;
     top: 20vh;
     background-color: #1a1a1a;
     height: 60vh;
-    width: 25vw;
-    border-radius: 0px 10px 10px 0px;
+    width: 30vw;
+    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding-top: 1.5rem;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 
-  div{
+    div {
+        width: 100%;
+    }
+
+    .inputs {
+        width: 75%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+
+        input {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #646cff;
+            padding: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            max-height: 100px;
+            min-width: 100%;
+            min-height: 50px;
+            max-width: 100%;
+            border-radius: 10px;
+            border: 1px solid #646cff;
+            background-color: #1a1a1a;
+        }
+
+        select {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #646cff;
+            padding: 10px;
+            background-color: #1a1a1a;
+            color: #fff;
+            outline: none;
+            font-size: 1rem;
+        }
+    }
+
+    button {
+        background-color: #646cff;
+        color: #fff;
+        width: 100%;
+        border-radius: 0px 0px 10px 10px;
+
+        &:hover {
+            background-color: #1a1a1a;
+            color: #646cff;
+        }
+    }
+}
+
+.admin {
     width: 100%;
-  }
-
-  .inputs {
-    width: 75%;
+    padding-top: 6rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    gap: 15px;
+    align-items: flex-end;
 
-    input {
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid #646cff;
-      padding: 10px;
+    h1 {
+        width: 100%;
+        text-align: center;
     }
-
-    textarea {
-      width: 100%;
-      padding: 10px;
-      max-height: 100px;
-      min-width: 100%;
-      min-height: 50px;
-      max-width: 100%;
-      border-radius: 10px;
-      border: 1px solid #646cff;
-      background-color: #1a1a1a;
-    }
-
-    select {
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid #646cff;
-      padding: 10px;
-      background-color: #1a1a1a;
-      color: #fff;
-      outline: none;
-      font-size: 1rem;
-    }
-  }
-
-  button{
-    background-color: #646cff;
-    color: #fff;
-    width: 100%;
-    border-radius: 0px 0px 10px 0px;
-
-    &:hover{
-      background-color: #1a1a1a;
-      color: #646cff;
-    }
-  }
-}
-
-.admin{
-    width: 100%;
-    padding-top: 6rem;
 }
 
 .edit-question {
     position: fixed;
     left: 0;
+    margin-left: 20px;
     top: 20vh;
     background-color: #1a1a1a;
     height: 60vh;
-    width: 25vw;
-    border-radius: 0px 10px 10px 0px;
+    width: 30vw;
+    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding-top: 1.5rem;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 
-  div{
-    width: 100%;
-  }
+    div {
+        width: 100%;
+    }
 
-  .inputs {
+    .inputs {
+        width: 75%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+
+        input {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #646cff;
+            padding: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            max-height: 100px;
+            min-width: 100%;
+            min-height: 50px;
+            max-width: 100%;
+            border-radius: 10px;
+            border: 1px solid #646cff;
+            background-color: #1a1a1a;
+        }
+
+        select {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #646cff;
+            padding: 10px;
+            background-color: #1a1a1a;
+            color: #fff;
+            outline: none;
+            font-size: 1rem;
+        }
+    }
+
+    button {
+        background-color: #646cff;
+        color: #fff;
+        width: 100%;
+        border-radius: 10px;
+
+        &:hover {
+            background-color: #1a1a1a;
+            color: #646cff;
+        }
+    }
+}
+.add-question label,
+.edit-question label {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background-color: #1a1a1a;
+    padding: 0 5px;
+    font-size: 0.9rem;
+    color: #646cff;
+}
+
+.add-question input,
+.edit-question input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #646cff;
+    background-color: #1a1a1a;
+    outline: none;
+    font-size: 1rem;
+}
+
+.button-edit-container {
+    display: flex;
+    justify-content: space-between;
     width: 75%;
+    overflow: hidden;
+    gap: 5px;
+
+    button {
+        transition: background-color 0.2s ease;
+    }
+    .updateButton {
+        border-radius: 0px 0px 0px 10px;
+    }
+
+    .cancelButton {
+        border-radius: 0px 0px 10px 0px;
+        background-color: #333;
+        color: #fff;
+    }
+}
+
+.questionsAdminContainer {
+    padding-top: 50px;
+    padding-right: 50px;
+    width: 60vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-
-    input {
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid #646cff;
-      padding: 10px;
-    }
-
-    textarea {
-      width: 100%;
-      padding: 10px;
-      max-height: 100px;
-      min-width: 100%;
-      min-height: 50px;
-      max-width: 100%;
-      border-radius: 10px;
-      border: 1px solid #646cff;
-      background-color: #1a1a1a;
-    }
-
-    select {
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid #646cff;
-      padding: 10px;
-      background-color: #1a1a1a;
-      color: #fff;
-      outline: none;
-      font-size: 1rem;
-    }
-  }
-
-  button{
-    background-color: #646cff;
-    color: #fff;
+    gap: 20px;
+}
+.questionAdminContainer {
+    background-color: #1a1a1a;
     width: 100%;
-    border-radius: 0px 0px 0px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 10px 10px 10px 10px;
+    align-items: center;
 
-    &:hover{
-      background-color: #1a1a1a;
-      color: #646cff;
+    .themeHeader{
+      border-radius: 10px 10px 0px 0px;
+      background-color: #646cff;
+      width: 100%;
     }
-  }
-}
-label {
-  position: absolute;
-  top: -10px;
-  left: 10px;
-  background-color: #1a1a1a;
-  padding: 0 5px;
-  font-size: 0.9rem;
-  color: #646cff;
-}
-
-input {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #646cff;
-  background-color: #1a1a1a;
-  outline: none;
-  font-size: 1rem;
-}
-
-.button-edit-container{
-  display: flex;
-  justify-content: space-between;
-  width: 75%;
-  overflow: hidden;
-  gap: 5px;
-
-  button{
-    transition: background-color 0.2s ease;
+    .pillContainer {
+        display: flex;
+        flex-direction: row;
+        gap: 0.2rem;
     }
-  .updateButton{
-    border-radius: 0px 0px 0px 10px;
-  }
 
-  .cancelButton{
-    border-radius: 0px 0px 0px 0px;
-    background-color: #333;
-    color: #fff;
-  }
-}
+    .questionAdminContainerInformations{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+      height: 100%;
 
-.questionsAdminContainer{
-  right: 0;
-  width: 60%;
-}
-.questionAdminContainer{
-  background-color: red;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+      .questionAdminContainerText{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        text-align: left;
+        width: fit-content;
+        gap: 10px;
+        padding: 0px 0px 10px 10px;
+
+        h3{
+          line-height: 1rem;
+        }
+      }
+
+      .questionAdminContainerButtons{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+        width: fit-content;
+
+        button{
+          background-color: #646cff;
+          color: #fff;
+          border-radius: 10px;
+          padding: 5px;
+          margin: 5px;
+          width: 100px;
+          transition: background-color 0.2s ease;
+
+          &:hover {
+              background-color: #1a1a1a;
+              color: #646cff;
+          }
+        }
+      }
+
+    }
 }
