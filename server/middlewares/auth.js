@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User'); // Adjust the path as necessary
 const JWT_SECRET = process.env.JWT_SECRET;
-let User = require('../models/User');
-
 
 const authenticateToken = (req, res, next) => {
   const token = req.header('Authorization');
@@ -15,7 +14,6 @@ const authenticateToken = (req, res, next) => {
     res.status(401).json({ message: 'Invalid token.' });
   }
 };
-
 
 const isTokenAdmin = async (req, res, next) => {
   const token = req.header('Authorization');
@@ -34,5 +32,4 @@ const isTokenAdmin = async (req, res, next) => {
   }
 };
 
-module.exports = authenticateToken;
-module.exports = isTokenAdmin;
+module.exports = { authenticateToken, isTokenAdmin };
