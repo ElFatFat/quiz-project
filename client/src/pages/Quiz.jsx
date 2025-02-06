@@ -18,7 +18,6 @@ const Quiz = () => {
     const [clickedButton, setClickedButton] = useState(null);
     const [correctAnswer, setCorrectAnswer] = useState(null);
     const [gameStarted, setGameStarted] = useState(false);
-    const [theme, setTheme] = useState('pas de thème choisi');
     const [currentTheme, setCurrentTheme] = useState('En attente de sélection...');
     const [themes, setThemes] = useState([]);
     const [selectedValue, setSelectedValue] = useState('default');
@@ -31,6 +30,7 @@ const Quiz = () => {
     const [isGameFinished, setIsGameFinished] = useState(false);
     const [scoreboard, setScoreboard] = useState([]);
     const [isSolo, setIsSolo] = useState(true);
+    const [nextQuestionTimer, setNextQuestionTimer] = useState(5);
 
     const generateRoomName = () => {
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -98,6 +98,7 @@ const Quiz = () => {
             if (message.type === 'correctAnswer') {
                 console.log('Correct answer:', message.correctAnswer);
                 setCorrectAnswer(message.correctAnswer);
+                setNextQuestionTimer(5);
             }
 
             if (message.type === 'stopQuestion') {
@@ -154,6 +155,23 @@ const Quiz = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (correctAnswer !== null) {
+            const interval = setInterval(() => {
+                setNextQuestionTimer(prev => {
+                    if (prev > 0) {
+                        return prev - 1;
+                    } else {
+                        clearInterval(interval);
+                        return 0;
+                    }
+                });
+            }, 1000);
+
+            return () => clearInterval(interval);
+        }
+    }, [correctAnswer]);
+
     const getUserInformation = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -193,8 +211,8 @@ const Quiz = () => {
     
         const updateTimer = () => {
             const elapsedTime = Date.now() - startTime;
-            const timeLeft = Math.max(15 - Math.floor(elapsedTime / 1000), 0);
-            setTimeLeft(timeLeft);
+            const timeLeft = Math.max(duration - elapsedTime, 0);
+            setTimeLeft(Math.ceil(timeLeft / 1000));
     
             if (timeLeft > 0) {
                 timerRef.current = requestAnimationFrame(updateTimer);
@@ -208,10 +226,9 @@ const Quiz = () => {
 
     const handleSelectChange = (e) => {
         const selectedTheme = e.target.value;
-        setSelectedValue(selectedTheme); // Mettre à jour la valeur sélectionnée
+        setSelectedValue(selectedTheme); 
         setMessage(selectedTheme);
-        setTheme(selectedTheme);
-        console.log('Selected theme:', selectedTheme); // Log pour vérifier la valeur sélectionnée
+        console.log('Selected theme:', selectedTheme); 
     };
 
     const handleSelectTheme = () => {
@@ -222,8 +239,7 @@ const Quiz = () => {
     return (
         <div className="quiz">
             <Navbar />
-            <h1>Quiz</h1>
-            <div>
+            <div className="questionContainer">
                 <h2>{currentQuestion}</h2>
             </div>
             {
@@ -254,7 +270,7 @@ const Quiz = () => {
                                             setClickedButton(index); 
                                         }}
                                         style={{ 
-                                            backgroundColor: correctAnswer === index ? 'lightgreen' : (clickedButton === index ? (correctAnswer !== null && clickedButton !== correctAnswer ? 'red' : 'lightblue') : 'white') 
+                                            backgroundColor: correctAnswer === index ? 'lightgreen' : (clickedButton === index ? (correctAnswer !== null && clickedButton !== correctAnswer ? 'red' : '#878dff') : 'white') 
                                         }}
                                         disabled={isQuestionStopped}
                                     >
@@ -263,6 +279,10 @@ const Quiz = () => {
                                 </li>
                             ))}
                         </ul>
+                        { correctAnswer !== null && (
+                            <h2>Question suivante dans {nextQuestionTimer} secondes</h2>
+                        )    
+                        }  
                         {isGameFinished && (
                         <>
                             <div className="overlay"></div>
@@ -321,7 +341,6 @@ const Quiz = () => {
             }
             {!isConnected && (
                 <div className="joinContainer">
-                    {/* <input type="text" placeholder="Type" value={type} onChange={(e) => setType(e.target.value)} /> */}
                     <div className="roomContainer">
                         <input type="text" placeholder={room} value={room} onChange={(e) => setRoom(e.target.value)} />
                         <button onClick={copyToClipboard}>Copier</button>
