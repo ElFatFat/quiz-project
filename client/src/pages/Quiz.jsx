@@ -280,7 +280,7 @@ const Quiz = () => {
                             ))}
                         </ul>
                         { correctAnswer !== null && (
-                            <h2>Question suivante dans {nextQuestionTimer} secondes</h2>
+                            <h2>Question suivante dans {nextQuestionTimer} seconde(s)</h2>
                         )    
                         }  
                         {isGameFinished && (
@@ -303,7 +303,7 @@ const Quiz = () => {
                                                 .sort((a, b) => b[1] - a[1])
                                                 .map(([player, playerScore], index) => (
                                                     <li key={index}>
-                                                        {index + 1}. {player}: {playerScore}
+                                                        {index + 1}. {player}: {playerScore}/{score.maxScore}
                                                     </li>
                                             ))}
                                         </ul>
