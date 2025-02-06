@@ -3,9 +3,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 30px;
     max-width: 100vw;
-    overflow: hidden;
 }
 
 .background {
@@ -128,8 +127,8 @@ a {
 .themes {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
 }
 
 .theme {
@@ -172,4 +171,22 @@ a {
 .theme > * {
     position: relative;
     z-index: 2; /* Ensure the text is above the pseudo-element */
+}
+
+@media (max-width: 768px) {
+    .home {
+        margin-top: 10rem;
+    }
+    .themes {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .home {
+        margin-top: 10rem;
+    }
+    .themes {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }

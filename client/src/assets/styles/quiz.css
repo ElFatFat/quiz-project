@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
     gap: 30px;
-    width: 80%;
+    width: 60%;
 }
 
 h1,h2 {
@@ -71,7 +71,7 @@ h1,h2 {
             button{
                 width: 100%;
                 padding: 10px;
-                margin: 10px;
+                margin: 10px 0;
                 border: 1px solid black;
                 border-radius: 5px;
                 cursor: pointer;
@@ -99,6 +99,13 @@ h1,h2 {
     button {
         height: 50px;
     }
+    >button {
+        animation: fadeIn 1s ease-out;
+        animation-delay: 0.5s;
+        animation-fill-mode: forwards;
+        opacity: 0;
+    }
+
 }
 
 @media (max-width: 768px) {
@@ -124,6 +131,11 @@ h1,h2 {
     }
 }
 
+.questionContainer {
+    width: 100%;
+    text-align: center;
+}
+
 .themeContainer {
     display: flex;
     flex-direction: column;
@@ -131,6 +143,7 @@ h1,h2 {
     justify-content: center;
     gap: 30px;
     width: 100%;
+    animation: fadeIn 1s ease-out;
 }
 
 .themeSelectorContainer {
@@ -165,6 +178,10 @@ h1,h2 {
 
 .startGameButton {
     margin-top: 25px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out;
+    animation-delay: 0.5s;
+    animation-fill-mode: forwards;
 }
 
 .timer {
@@ -266,6 +283,7 @@ h1,h2 {
     align-items: center;
     justify-content: center;
     gap: 10px;
+    animation: fadeIn 1s ease-out;
 }
 
 @media (max-width: 768px) {
@@ -280,6 +298,10 @@ h1,h2 {
     
     .themeSelectorContainer select option {
         padding: 10px; 
+    }
+
+    .quiz {
+        width: 80%;
     }
 }
 
@@ -296,5 +318,20 @@ h1,h2 {
 
     .themeSelectorContainer select option {
         padding: 15px; 
+    }
+
+    .quiz {
+        width: 90%;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
     }
 }
