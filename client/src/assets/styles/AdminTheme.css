@@ -5,6 +5,7 @@
     align-items: center;
     width: 80%;
     gap: 50px;
+    padding-top: 15%;
 }
 
 .admin-themes {
@@ -13,8 +14,67 @@
     flex-direction: column;
     align-items: center;
     width: 50%;
-    .theme {
+    gap: 20px;
+    .admin-theme {
         width: 50%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        border: 1px solid #646cff;
+        border-radius: 10px;
+        background-color: #1a1a1a;
+        h3 {
+            margin: 0;
+        }
+        button {
+            background-color: #646cff;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
     }
 }
 
+.add-theme {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 50%;
+}
+
+.add-theme-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 50%;
+    input {
+        width: 50%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #646cff;
+    }
+    button {
+        background-color: #646cff;
+        border: none;
+        color: white;
+        padding: 10px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+}

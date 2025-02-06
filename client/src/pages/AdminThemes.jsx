@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 import axios from 'axios';
 import '../assets/styles/AdminTheme.css';
 
@@ -56,23 +57,27 @@ const AdminThemes = () => {
     };
 
     return (
+        <>
+        <Navbar />
         <div className="adminThemesContainer">
             <h1>Gestion des thèmes</h1>
 
             <div className="add-theme">
                 <h2>Ajouter un thème</h2>
-                <input
-                    type="text"
-                    placeholder="Titre du thème"
-                    value={newTheme.title}
-                    onChange={(e) => setNewTheme({ title: e.target.value })}
-                />
-                <button onClick={addTheme}>Ajouter</button>
+                <div className="add-theme-form">
+                    <input
+                        type="text"
+                        placeholder="Titre du thème"
+                        value={newTheme.title}
+                        onChange={(e) => setNewTheme({ title: e.target.value })}
+                    />
+                    <button onClick={addTheme}>Ajouter</button>
+                </div>
             </div>
 
             <div className="admin-themes">
                 {themes.map((theme, index) => (
-                    <div key={index} className="theme">
+                    <div key={index} className="admin-theme">
                         <h3>{theme.title}</h3>
                         <button className="deleteButton" onClick={() => deleteTheme(theme._id)}>Supprimer</button>
                     </div>
@@ -83,6 +88,7 @@ const AdminThemes = () => {
                 <button>Retour à l'accueil</button>
             </Link>
         </div>
+        </>
     );
 };
 
