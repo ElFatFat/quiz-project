@@ -97,8 +97,7 @@ const Navbar = () => {
             <div className="navbar-brand">
                 <Link to="/home">Stuffy II</Link>
             </div>
-            <div className="navbar-menu">
-            </div>
+
             <div 
                 className="navbar-name" 
                 onMouseEnter={handleMouseEnter} 

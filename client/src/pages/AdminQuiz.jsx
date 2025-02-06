@@ -121,7 +121,7 @@ const AdminQuiz = () => {
     };
 
     return (
-        <div className="admin">
+        <div className="adminQuizContainer">
             <Navbar />
             <h1>Gestion des quiz</h1>
             {!editQuestion && (

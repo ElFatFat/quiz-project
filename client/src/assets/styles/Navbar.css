@@ -1,14 +1,13 @@
 .navbar {
     background-color: #1a1a1a;
     border-bottom: 1px solid #646cff;
-    width: 100%;
+    width: 100vw;
     position: fixed;
     z-index: 1000;
     top: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    vertical-align: middle;
-
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .navbar-brand {
@@ -19,7 +18,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding-inline: 1rem;
+    margin-left: 1rem;
 }
 
 .navbar-brand a {
@@ -28,17 +27,6 @@
     width: fit-content;
 }
 
-.navbar-menu {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-.navbar-menu a {
-    color: #fff;
-    text-decoration: none;
-    margin-left: 1rem;
-}
 
 .navbar-name {
     display: flex;
@@ -47,7 +35,7 @@
     color: #646cff;
     font-weight: 700;
     position: relative;
-    padding-inline: 1rem;
+    margin-right: 1rem;
 
 
     img {
